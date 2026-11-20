@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class Test {
     static Scanner sc = new Scanner(System.in);
 
-    // Yeu cau 4: danh sach Sach quan ly bang ArrayList
     static ArrayList<Sach> danhSach = new ArrayList<>();
 
     // ===== Cac ham nhap lieu (dung vong lap de nhap lai khi sai) =====
@@ -57,43 +56,46 @@ public class Test {
 
     static Sach timTheoMa(String ma) {
         for (Sach s : danhSach) {
-            if (s.maSach.equalsIgnoreCase(ma)) {
+            if (s.getMaSach().equalsIgnoreCase(ma)) {
                 return s;
             }
         }
         return null;
     }
 
-    // ===== Yeu cau 3: Tao doi tuong tu lop Sach =====
-    static void yeuCau3() {
-        System.out.println("===== YEU CAU 3: TAO DOI TUONG TU LOP SACH =====");
+    // ===== Minh hoa tinh dong goi: constructor, getter, setter =====
+    static void minhHoaDongGoi() {
+        System.out.println("===== MINH HOA TINH DONG GOI =====");
 
-        Sach s1 = new Sach();
-        s1.maSach = "S001";
-        s1.tieuDe = "Lap trinh Java";
-        s1.tacGia = "Nguyen Van A";
-        s1.namXuatBan = 2023;
-        s1.soLuong = 10;
+        // Khoi tao bang constructor day du tham so
+        Sach s1 = new Sach("S001", "Lap trinh Java", "Nguyen Van A", 2023, 10);
+        Sach s2 = new Sach("S002", "Cau truc du lieu", "Tran Thi B", 2021, 5);
 
-        Sach s2 = new Sach();
-        s2.maSach = "S002";
-        s2.tieuDe = "Cau truc du lieu";
-        s2.tacGia = "Tran Thi B";
-        s2.namXuatBan = 2021;
-        s2.soLuong = 5;
-
-        System.out.println("--- Sach 1 ---");
+        System.out.println("--- Sach 1 (tao bang constructor) ---");
         s1.hienThiThongTin();
-        System.out.println("--- Sach 2 ---");
-        s2.hienThiThongTin();
 
-        // Dua 2 sach mau vao danh sach de dung cho Yeu cau 4
+        // Doc du lieu qua getter (khong the truy cap truc tiep vi thuoc tinh la private)
+        System.out.println("Doc qua getter: tieu de = " + s2.getTieuDe()
+                + ", so luong = " + s2.getSoLuong());
+
+        // Thu gan gia tri khong hop le qua setter -> bi tu choi
+        System.out.println("Thu setNamXuatBan(3000):");
+        s1.setNamXuatBan(3000);
+        System.out.println("Thu setSoLuong(-5):");
+        s1.setSoLuong(-5);
+        System.out.println("Sau khi thu, gia tri van la: nam = " + s1.getNamXuatBan()
+                + ", so luong = " + s1.getSoLuong());
+
+        // Gan gia tri hop le qua setter -> thanh cong
+        s1.setSoLuong(25);
+        System.out.println("Sau setSoLuong(25): so luong = " + s1.getSoLuong());
+
         danhSach.add(s1);
         danhSach.add(s2);
         System.out.println("(Da them 2 sach mau vao danh sach)");
     }
 
-    // ===== Yeu cau 4: Quan ly danh sach Sach bang ArrayList =====
+    // ===== Quan ly danh sach Sach bang ArrayList =====
     static void themSach() {
         String ma;
         while (true) {
@@ -103,14 +105,13 @@ public class Test {
             }
             System.out.println("Ma sach da ton tai, vui long nhap ma khac!");
         }
-        Sach s = new Sach();
-        s.maSach = ma;
-        s.tieuDe = nhapChuoi("Nhap tieu de: ");
-        s.tacGia = nhapChuoi("Nhap tac gia: ");
-        s.namXuatBan = nhapNamXuatBan();
-        s.soLuong = nhapSoLuong();
+        String tieuDe = nhapChuoi("Nhap tieu de: ");
+        String tacGia = nhapChuoi("Nhap tac gia: ");
+        int nam = nhapNamXuatBan();
+        int sl = nhapSoLuong();
+        Sach s = new Sach(ma, tieuDe, tacGia, nam, sl);
         danhSach.add(s);
-        System.out.println("Da them sach " + s.maSach + ".");
+        System.out.println("Da them sach " + s.getMaSach() + ".");
     }
 
     static void hienThiDanhSach() {
@@ -129,7 +130,8 @@ public class Test {
         String tuKhoa = nhapChuoi("Nhap ma hoac tieu de sach can tim: ").toLowerCase();
         int dem = 0;
         for (Sach s : danhSach) {
-            if (s.maSach.toLowerCase().equals(tuKhoa) || s.tieuDe.toLowerCase().contains(tuKhoa)) {
+            if (s.getMaSach().toLowerCase().equals(tuKhoa)
+                    || s.getTieuDe().toLowerCase().contains(tuKhoa)) {
                 if (dem == 0) {
                     System.out.println("Ket qua tim kiem:");
                 }
@@ -150,7 +152,7 @@ public class Test {
             System.out.println("Khong tim thay sach co ma " + ma + ".");
         } else {
             danhSach.remove(s);
-            System.out.println("Da xoa sach " + s.maSach + ".");
+            System.out.println("Da xoa sach " + s.getMaSach() + ".");
         }
     }
 
@@ -164,23 +166,23 @@ public class Test {
         System.out.println("Thong tin hien tai:");
         s.hienThiThongTin();
         System.out.println("Nhap thong tin moi (giu nguyen ma sach):");
-        s.tieuDe = nhapChuoi("Nhap tieu de: ");
-        s.tacGia = nhapChuoi("Nhap tac gia: ");
-        s.namXuatBan = nhapNamXuatBan();
-        s.soLuong = nhapSoLuong();
-        System.out.println("Da sua sach " + s.maSach + ".");
+        s.setTieuDe(nhapChuoi("Nhap tieu de: "));
+        s.setTacGia(nhapChuoi("Nhap tac gia: "));
+        s.setNamXuatBan(nhapNamXuatBan());
+        s.setSoLuong(nhapSoLuong());
+        System.out.println("Da sua sach " + s.getMaSach() + ".");
     }
 
     static void tinhTongSoLuong() {
         int tong = 0;
         for (Sach s : danhSach) {
-            tong += s.soLuong;
+            tong += s.getSoLuong();
         }
         System.out.println("Tong so luong sach: " + tong);
     }
 
     public static void main(String[] args) {
-        yeuCau3();
+        minhHoaDongGoi();
 
         int chon;
         do {
